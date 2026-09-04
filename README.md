@@ -14,7 +14,7 @@ This repo contains only the chart. The images it deploys are built and published
 Every `v*` tag push packages the chart and pushes it to ghcr.io (see `.github/workflows/release.yml`):
 
 ```bash
-helm upgrade --install switchyard oci://ghcr.io/macintoshme/charts/switchyard --version 0.2.7
+helm upgrade --install switchyard oci://ghcr.io/macintoshme/charts/switchyard --version 0.2.8
 ```
 
 The release workflow refuses a tag that does not match `version`, `appVersion` in `Chart.yaml`, and the default `configurator.image.tag` in `values.yaml`, because the chart defaults must point at a configurator image that already exists in ghcr.io. Cut the configurator release (tag `v*` in the switchyard-configurator repo) before tagging this one.
@@ -66,7 +66,7 @@ Key values are documented inline in [`values.yaml`](values.yaml) and validated a
 | `providers` | `[]` | Pre-provisioned token `Secret` references (`envVar`, `secret`, `secretKey`), injected as `secretKeyRef` env vars. |
 | `namespace.create` / `namespace.name` | `true` / `switchyard` | Dedicated namespace for all chart resources; `helm uninstall` removes it. |
 | `switchyard.image` | `ghcr.io/macintoshme/nemo-switchyard:main` | Server image; pin with `sha-<commit>` or an upstream `vX.Y.Z` tag. |
-| `configurator.image` | `ghcr.io/macintoshme/nemo-switchyard-configurator:v0.2.7` | Configurator image; follows the chart `appVersion` by default. |
+| `configurator.image` | `ghcr.io/macintoshme/nemo-switchyard-configurator:v0.2.8` | Configurator image; follows the chart `appVersion` by default. |
 | `configurator.tokenSecret.enabled` | `true` | UI-managed `<release>-tokens` Secret for provider tokens. |
 | `serviceType` | `ClusterIP` | Service type for both services. |
 | `serviceMonitor.enabled` | `false` | Prometheus Operator `ServiceMonitor` scraping `/metrics`. |
@@ -81,7 +81,7 @@ switchyard:
   image:
     registry: ghcr.io/your-org   # or "" for a locally loaded image
     repository: nemo-switchyard
-    tag: v0.2.7                  # empty = chart appVersion
+    tag: v0.2.8                  # empty = chart appVersion
 configurator:
   image:
     registry: ghcr.io/your-org
