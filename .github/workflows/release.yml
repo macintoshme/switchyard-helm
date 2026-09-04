@@ -1,0 +1,61 @@
+# Release pipeline: on a v* tag push, verify version sync, then package
+# and push the Helm chart to ghcr.io. The images the chart deploys are
+# built elsewhere: the server image by the Switchyard fork's pipeline and
+# the configurator image by the switchyard-configurator repo's pipeline.
+name: release
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: read
+  packages: write
+
+env:
+  REGISTRY: ghcr.io
+
+jobs:
+  version-sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Assert git tag matches chart versions
+        id: versions
+        run: |
+          set -eu
+          TAG="${GITHUB_REF_NAME}"
+          APPVERSION="$(awk '/^appVersion:/{print $2; exit}' Chart.yaml)"
+          CHARTVERSION="$(awk '/^version:/{print $2; exit}' Chart.yaml)"
+          CFGTAG="$(awk '/^configurator:/{f=1} f && /tag:/{print $2; exit}' values.yaml)"
+          echo "tag=$TAG appVersion=$APPVERSION chartVersion=$CHARTVERSION configuratorTag=$CFGTAG"
+          if [ "${TAG#v}" != "$CHARTVERSION" ]; then
+            echo "::error::git tag $TAG does not match chart version $CHARTVERSION (without the v prefix)" && exit 1
+          fi
+          if [ "$TAG" != "$APPVERSION" ]; then
+            echo "::error::git tag $TAG does not match chart appVersion $APPVERSION" && exit 1
+          fi
+          # The configurator image for this tag is published by the
+          # switchyard-configurator repo's release pipeline; releasing the
+          # chart before that image exists would ship a broken default.
+          if [ "$TAG" != "$CFGTAG" ]; then
+            echo "::error::git tag $TAG does not match configurator image tag $CFGTAG in values.yaml" && exit 1
+          fi
+
+  chart:
+    needs: version-sync
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: azure/setup-helm@v4
+        with:
+          version: latest
+      - name: Package chart
+        run: helm package .
+      - name: Log in to ghcr.io
+        run: |
+          echo "${{ secrets.GITHUB_TOKEN }}" | helm registry login ${{ env.REGISTRY }} \
+            --username "${{ github.actor }}" --password-stdin
+      - name: Push chart
+        run: |
+          helm push switchyard-*.tgz oci://${{ env.REGISTRY }}/${{ github.repository_owner }}/charts
