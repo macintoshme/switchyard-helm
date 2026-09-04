@@ -6,7 +6,7 @@ The chart ships a minimal placeholder configuration (one keyless
 passthrough route); edit it in the configurator UI or upgrade with your
 own routes file:
 
-  helm upgrade {{ .Release.Name }} ./chart -n {{ .Release.Namespace }} --set-file routesToml=routes.toml
+  helm upgrade {{ .Release.Name }} . -n {{ .Release.Namespace }} --set-file routesToml=routes.toml
 
 Access the configurator UI (edits the config ConfigMap):
 

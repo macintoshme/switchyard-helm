@@ -18,7 +18,7 @@ fullnameOverride: ""
 # the <release>-config-seed ConfigMap): when this value changes, the next
 # configurator start applies it to the runtime ConfigMap — overriding
 # UI-saved edits. Unchanged, UI edits keep winning.
-#   helm upgrade --install switchyard ./chart --set-file routesToml=routes.toml
+#   helm upgrade --install switchyard . --set-file routesToml=routes.toml
 routesToml: |
   schema_version = 1
 
@@ -41,7 +41,7 @@ routesToml: |
 # into the configurator image (configurator/model_hints.toml). When set,
 # the content is rendered into a ConfigMap and mounted over the baked file
 # (MODEL_HINTS_FILE), so suggestions can be tuned without an image rebuild:
-#   helm upgrade switchyard ./chart --set-file modelHints=model_hints.toml
+#   helm upgrade switchyard . --set-file modelHints=model_hints.toml
 modelHints: ""
 
 # Provider definitions – metadata only; tokens stay in Kubernetes Secrets and
