@@ -88,7 +88,7 @@ configurator:
     # the chart's configurator version.
     registry: ghcr.io
     repository: macintoshme/nemo-switchyard-configurator
-    tag: v0.2.12
+    tag: v0.2.13
   pullPolicy: IfNotPresent
   port: 8080
   uid: 1000
@@ -122,7 +122,9 @@ serviceMonitor:
 
 # Grafana dashboard – opt-in; requires a Grafana instance with the dashboard
 # sidecar (kube-prometheus-stack default). When enabled, the dashboard is
-# shipped as a ConfigMap with sidecar discovery labels.
+# shipped as a ConfigMap with sidecar discovery labels. It covers request/error
+# rates, traffic share, token throughput, latency percentiles, and routing
+# effectiveness on the metrics documented in the README.
 grafanaDashboard:
   enabled: false
   additionalLabels: {}

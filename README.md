@@ -103,7 +103,7 @@ configurator:
 
 ## Metrics
 
-Switchyard exposes Prometheus metrics (request/error counters, latency histograms, per-model counts). With `serviceMonitor.enabled=true` a Prometheus Operator installation scrapes them, and with `grafanaDashboard.enabled=true` the shipped Grafana dashboard shows request rate, error rate, latency percentiles, and per-model request and error counts. Prometheus and Grafana themselves are assumed to come from the cluster (e.g. kube-prometheus-stack).
+Switchyard exposes Prometheus metrics (request/error counters, latency histograms, token counters, routing-overhead and run-duration histograms). With `serviceMonitor.enabled=true` a Prometheus Operator installation scrapes them, and with `grafanaDashboard.enabled=true` the shipped Grafana dashboard shows request rate and traffic share by model, router and direct-upstream error rates, error-code distribution, token throughput (prompt/completion/reasoning), total/model-call/routing-overhead latency percentiles, and routing effectiveness (decisions, retries recovered, run duration). Prometheus and Grafana themselves are assumed to come from the cluster (e.g. kube-prometheus-stack).
 
 ## Notes
 
