@@ -31,7 +31,7 @@
       "gridPos": {"x": 6, "y": 0, "w": 6, "h": 4},
       "fieldConfig": {"defaults": {"unit": "reqps", "thresholds": {"mode": "absolute", "steps": [{"color": "green", "value": null}, {"color": "orange", "value": 0.1}, {"color": "red", "value": 1}]}}, "overrides": []},
       "options": {"reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false}, "orientation": "auto", "textMode": "auto", "colorMode": "value", "graphMode": "area", "justifyMode": "auto"},
-      "targets": [{"datasource": {"type": "prometheus", "uid": "prometheus"}, "editorMode": "code", "expr": "sum(rate(switchyard_errors_total[5m]))", "legendFormat": "Errors / s", "range": true, "refId": "A"}]
+      "targets": [{"datasource": {"type": "prometheus", "uid": "prometheus"}, "editorMode": "code", "expr": "sum(rate(switchyard_client_responses_total{outcome=~\"other_error|retryable_error\"}[5m]))", "legendFormat": "Errors / s", "range": true, "refId": "A"}]
     },
     {
       "id": 3,
@@ -41,7 +41,7 @@
       "gridPos": {"x": 12, "y": 0, "w": 6, "h": 4},
       "fieldConfig": {"defaults": {"unit": "percentunit", "thresholds": {"mode": "absolute", "steps": [{"color": "green", "value": null}, {"color": "yellow", "value": 0.05}, {"color": "red", "value": 0.1}]}}, "overrides": []},
       "options": {"reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false}, "orientation": "auto", "textMode": "auto", "colorMode": "value", "graphMode": "area", "justifyMode": "auto"},
-      "targets": [{"datasource": {"type": "prometheus", "uid": "prometheus"}, "editorMode": "code", "expr": "sum(rate(switchyard_errors_total[5m])) / clamp_min(sum(rate(switchyard_requests_total[5m])), 1)", "legendFormat": "Error rate", "range": true, "refId": "A"}]
+      "targets": [{"datasource": {"type": "prometheus", "uid": "prometheus"}, "editorMode": "code", "expr": "sum(rate(switchyard_client_responses_total{outcome=~\"other_error|retryable_error\"}[5m])) / clamp_min(sum(rate(switchyard_requests_total[5m])), 1)", "legendFormat": "Error rate", "range": true, "refId": "A"}]
     },
     {
       "id": 4,
@@ -66,12 +66,12 @@
     {
       "id": 6,
       "type": "timeseries",
-      "title": "Error rate by model",
+      "title": "Errors by outcome",
       "datasource": {"type": "prometheus", "uid": "prometheus"},
       "gridPos": {"x": 12, "y": 4, "w": 12, "h": 8},
       "fieldConfig": {"defaults": {"unit": "reqps", "custom": {"drawStyle": "line", "lineInterpolation": "smooth", "lineWidth": 2, "fillOpacity": 10, "stacking": {"mode": "none", "group": "A"}, "pointSize": 5, "showPoints": "never", "spanNulls": false}}, "overrides": []},
       "options": {"legend": {"displayMode": "table", "placement": "bottom", "calcs": ["lastNotNull", "max"]}, "tooltip": {"mode": "multi", "sort": "desc"}},
-      "targets": [{"datasource": {"type": "prometheus", "uid": "prometheus"}, "editorMode": "code", "expr": "sum by (model) (rate(switchyard_errors_total[5m]))", "legendFormat": "{{model}}", "range": true, "refId": "A"}]
+      "targets": [{"datasource": {"type": "prometheus", "uid": "prometheus"}, "editorMode": "code", "expr": "sum by (outcome) (rate(switchyard_client_responses_total{outcome!=\"ok\"}[5m]))", "legendFormat": "{{outcome}}", "range": true, "refId": "A"}]
     }
   ]
 }
