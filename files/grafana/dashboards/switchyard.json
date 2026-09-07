@@ -275,6 +275,77 @@
       "fieldConfig": {"defaults": {"unit": "ms", "custom": {"drawStyle": "line", "lineInterpolation": "smooth", "lineWidth": 2, "fillOpacity": 10, "stacking": {"mode": "none", "group": "A"}, "pointSize": 5, "showPoints": "never", "spanNulls": false}}, "overrides": []},
       "options": {"legend": {"displayMode": "table", "placement": "bottom", "calcs": ["lastNotNull", "max"]}, "tooltip": {"mode": "multi", "sort": "desc"}},
       "targets": [{"datasource": {"type": "prometheus", "uid": "prometheus"}, "editorMode": "code", "expr": "histogram_quantile(0.95, sum by (le, algorithm) (rate(switchyard_run_duration_ms_bucket[5m])))", "legendFormat": "{{algorithm}}", "range": true, "refId": "A"}]
+    },
+    {
+      "id": 200,
+      "type": "row",
+      "title": "Per-Replica Metrics",
+      "collapsed": false,
+      "gridPos": {"x": 0, "y": 64, "w": 24, "h": 1},
+      "panels": []
+    },
+    {
+      "id": 201,
+      "type": "timeseries",
+      "title": "Requests per second by pod",
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "gridPos": {"x": 0, "y": 65, "w": 12, "h": 8},
+      "fieldConfig": {"defaults": {"unit": "reqps", "custom": {"drawStyle": "line", "lineInterpolation": "smooth", "lineWidth": 2, "fillOpacity": 10, "stacking": {"mode": "none", "group": "A"}, "pointSize": 5, "showPoints": "never", "spanNulls": false}}, "overrides": []},
+      "options": {"legend": {"displayMode": "table", "placement": "bottom", "calcs": ["lastNotNull", "max"]}, "tooltip": {"mode": "multi", "sort": "desc"}},
+      "targets": [{"datasource": {"type": "prometheus", "uid": "prometheus"}, "editorMode": "code", "expr": "sum by (pod) (rate(switchyard_requests_total[5m]))", "legendFormat": "{{pod}}", "range": true, "refId": "A"}]
+    },
+    {
+      "id": 202,
+      "type": "timeseries",
+      "title": "Total latency p95 by pod",
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "gridPos": {"x": 12, "y": 65, "w": 12, "h": 8},
+      "fieldConfig": {"defaults": {"unit": "ms", "custom": {"drawStyle": "line", "lineInterpolation": "smooth", "lineWidth": 2, "fillOpacity": 10, "stacking": {"mode": "none", "group": "A"}, "pointSize": 5, "showPoints": "never", "spanNulls": false}}, "overrides": []},
+      "options": {"legend": {"displayMode": "table", "placement": "bottom", "calcs": ["lastNotNull", "max"]}, "tooltip": {"mode": "multi", "sort": "desc"}},
+      "targets": [{"datasource": {"type": "prometheus", "uid": "prometheus"}, "editorMode": "code", "expr": "histogram_quantile(0.95, sum by (le, pod) (rate(switchyard_total_latency_ms_bucket[5m])))", "legendFormat": "{{pod}}", "range": true, "refId": "A"}]
+    },
+    {
+      "id": 203,
+      "type": "timeseries",
+      "title": "Model-call latency p95 by pod",
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "gridPos": {"x": 0, "y": 73, "w": 12, "h": 8},
+      "fieldConfig": {"defaults": {"unit": "ms", "custom": {"drawStyle": "line", "lineInterpolation": "smooth", "lineWidth": 2, "fillOpacity": 10, "stacking": {"mode": "none", "group": "A"}, "pointSize": 5, "showPoints": "never", "spanNulls": false}}, "overrides": []},
+      "options": {"legend": {"displayMode": "table", "placement": "bottom", "calcs": ["lastNotNull", "max"]}, "tooltip": {"mode": "multi", "sort": "desc"}},
+      "targets": [{"datasource": {"type": "prometheus", "uid": "prometheus"}, "editorMode": "code", "expr": "histogram_quantile(0.95, sum by (le, pod) (rate(switchyard_model_call_latency_ms_bucket[5m])))", "legendFormat": "{{pod}}", "range": true, "refId": "A"}]
+    },
+    {
+      "id": 204,
+      "type": "timeseries",
+      "title": "Error rate by pod",
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "gridPos": {"x": 12, "y": 73, "w": 12, "h": 8},
+      "fieldConfig": {"defaults": {"unit": "reqps", "custom": {"drawStyle": "line", "lineInterpolation": "smooth", "lineWidth": 2, "fillOpacity": 10, "stacking": {"mode": "none", "group": "A"}, "pointSize": 5, "showPoints": "never", "spanNulls": false}}, "overrides": []},
+      "options": {"legend": {"displayMode": "table", "placement": "bottom", "calcs": ["lastNotNull", "max"]}, "tooltip": {"mode": "multi", "sort": "desc"}},
+      "targets": [{"datasource": {"type": "prometheus", "uid": "prometheus"}, "editorMode": "code", "expr": "sum by (pod) (rate(switchyard_client_responses_total{outcome=~\"retryable_error|other_error\"}[5m]))", "legendFormat": "{{pod}}", "range": true, "refId": "A"}]
+    },
+    {
+      "id": 205,
+      "type": "timeseries",
+      "title": "Routing overhead p95 by pod",
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "gridPos": {"x": 0, "y": 81, "w": 12, "h": 8},
+      "fieldConfig": {"defaults": {"unit": "ms", "custom": {"drawStyle": "line", "lineInterpolation": "smooth", "lineWidth": 2, "fillOpacity": 10, "stacking": {"mode": "none", "group": "A"}, "pointSize": 5, "showPoints": "never", "spanNulls": false}}, "overrides": []},
+      "options": {"legend": {"displayMode": "table", "placement": "bottom", "calcs": ["lastNotNull", "max"]}, "tooltip": {"mode": "multi", "sort": "desc"}},
+      "targets": [{"datasource": {"type": "prometheus", "uid": "prometheus"}, "editorMode": "code", "expr": "histogram_quantile(0.95, sum by (le, pod) (rate(switchyard_routing_overhead_ms_bucket[5m])))", "legendFormat": "{{pod}}", "range": true, "refId": "A"}]
+    },
+    {
+      "id": 206,
+      "type": "timeseries",
+      "title": "Token throughput by pod",
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "gridPos": {"x": 12, "y": 81, "w": 12, "h": 8},
+      "fieldConfig": {"defaults": {"unit": "tok/s", "custom": {"drawStyle": "line", "lineInterpolation": "smooth", "lineWidth": 2, "fillOpacity": 20, "stacking": {"mode": "normal", "group": "A"}, "pointSize": 5, "showPoints": "never", "spanNulls": false}}, "overrides": []},
+      "options": {"legend": {"displayMode": "table", "placement": "bottom", "calcs": ["lastNotNull", "max"]}, "tooltip": {"mode": "multi", "sort": "desc"}},
+      "targets": [
+        {"datasource": {"type": "prometheus", "uid": "prometheus"}, "editorMode": "code", "expr": "sum by (pod) (rate(switchyard_prompt_tokens_total[5m]))", "legendFormat": "{{pod}} - prompt", "range": true, "refId": "A"},
+        {"datasource": {"type": "prometheus", "uid": "prometheus"}, "editorMode": "code", "expr": "sum by (pod) (rate(switchyard_completion_tokens_total[5m]))", "legendFormat": "{{pod}} - completion", "range": true, "refId": "B"}
+      ]
     }
   ]
 }

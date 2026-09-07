@@ -60,7 +60,7 @@ imagePullSecrets: []
 
 # Switchyard deployment settings
 switchyard:
-  replicaCount: 1
+  replicaCount: 2
   image:
     # Published by the switchyard fork's image pipeline (ghcr, public).
     # `main` rolls with every push to the fork; pin with `sha-<commit>` or
@@ -88,7 +88,7 @@ configurator:
     # the chart's configurator version.
     registry: ghcr.io
     repository: macintoshme/nemo-switchyard-configurator
-    tag: v0.2.15
+    tag: v0.2.16
   pullPolicy: IfNotPresent
   port: 8080
   uid: 1000
