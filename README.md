@@ -66,6 +66,7 @@ Key values are documented inline in [`values.yaml`](values.yaml) and validated a
 | `providers` | `[]` | Pre-provisioned token `Secret` references (`envVar`, `secret`, `secretKey`), injected as `secretKeyRef` env vars. |
 | `namespace.create` / `namespace.name` | `true` / `switchyard` | Dedicated namespace for all chart resources; `helm uninstall` removes it. |
 | `switchyard.image` | `ghcr.io/macintoshme/nemo-switchyard:main` | Server image; pin with `sha-<commit>` or an upstream `vX.Y.Z` tag. |
+| `switchyard.nodeSelector` | `{}` | Constrain switchyard pods to specific nodes (e.g. when only some nodes' CPUs support the server binary's instruction set). |
 | `configurator.image` | `ghcr.io/macintoshme/nemo-switchyard-configurator:v0.2.8` | Configurator image; follows the chart `appVersion` by default. |
 | `configurator.tokenSecret.enabled` | `true` | UI-managed `<release>-tokens` Secret for provider tokens. |
 | `serviceType` | `ClusterIP` | Service type for both services. |

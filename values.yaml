@@ -71,6 +71,11 @@ switchyard:
   # Always re-resolve the rolling `main` tag on pod start.
   pullPolicy: Always
   port: 4000
+  # Constrain switchyard pods to specific nodes (e.g. only nodes whose CPU
+  # supports the instruction set the server image was built for).
+  #   nodeSelector:
+  #     kubernetes.io/hostname: endorkube
+  nodeSelector: {}
   # Resource guidance — the Rust server is lightweight; raise for high
   # throughput. Example:
   #   resources:
@@ -88,7 +93,7 @@ configurator:
     # the chart's configurator version.
     registry: ghcr.io
     repository: macintoshme/nemo-switchyard-configurator
-    tag: v0.2.16
+    tag: v0.2.17
   pullPolicy: IfNotPresent
   port: 8080
   uid: 1000
@@ -103,6 +108,10 @@ configurator:
   tokenSecret:
     enabled: true
     # name: my-tokens
+  # Constrain configurator pods to specific nodes.
+  #   nodeSelector:
+  #     kubernetes.io/hostname: endorkube
+  nodeSelector: {}
   # Resource guidance — the FastAPI configurator is idle most of the time.
   # Example:
   #   resources:
